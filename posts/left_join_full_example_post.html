@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why LEFT JOIN Needs an 'AND' Clause Instead of a 'WHERE' Clause to Preserve the Left Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 40px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .author {
+            font-style: italic;
+            color: #555;
+        }
+        .date {
+            color: #555;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        ul {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Why LEFT JOIN Needs an 'AND' Clause Instead of a 'WHERE' Clause to Preserve the Left Table</h1>
+
+    <p class="author">Author: Yichun Chen</p>
+    <p class="date">Date: September 19, 2024</p>
+
+    <p>In SQL, a <strong>LEFT JOIN</strong> is used to retrieve all records from the left table and the matched records from the right table. When there is no match, <code>NULL</code> values are returned from the right table. A common mistake occurs when users try to apply filtering conditions on the right table using the <strong>WHERE</strong> clause, which can inadvertently change the behavior of the <code>LEFT JOIN</code> into an <code>INNER JOIN</code> by excluding records from the left table.</p>
+
+    <h2>Example with a WHERE Clause</h2>
+
+    <p>Let’s look at an example:</p>
+
+    <pre><code>
+SELECT customers.customer_id, customers.customer_name, orders.order_id
+FROM customers
+LEFT JOIN orders ON customers.customer_id = orders.customer_id
+WHERE orders.status = 'shipped';
+    </code></pre>
+
+    <p>In this query, the intention is to return all customers along with their orders that have been shipped. However, using the <code>WHERE</code> clause to filter for shipped orders will exclude any customers who don’t have an order with status 'shipped'. The query now behaves as if we performed an <code>INNER JOIN</code>, removing rows where there is no match in the <code>orders</code> table.</p>
+
+    <h2>The Correct Approach: Using the AND Clause</h2>
+
+    <p>To maintain the desired behavior of the <code>LEFT JOIN</code> and include all customers, regardless of whether they have a shipped order, the filtering condition should be moved to the <code>ON</code> clause like this:</p>
+
+    <pre><code>
+SELECT customers.customer_id, customers.customer_name, orders.order_id
+FROM customers
+LEFT JOIN orders ON customers.customer_id = orders.customer_id
+AND orders.status = 'shipped';
+    </code></pre>
+
+    <p>Now, the <code>LEFT JOIN</code> preserves all customers, and the filter on <code>orders.status</code> only applies to the matched rows from the <code>orders</code> table. If a customer doesn’t have a shipped order, the order-related columns will return <code>NULL</code> but the customer will still be included in the result set.</p>
+
+    <h2>Why This Matters</h2>
+
+    <p>The key difference is that the <code>WHERE</code> clause operates on the final result set after the <code>JOIN</code>, while the <code>ON</code> clause controls which rows are included in the join itself. By placing the condition in the <code>ON</code> clause, you ensure that the <code>LEFT JOIN</code> behaves as expected, preserving all rows from the left table while selectively including rows from the right table based on the condition.</p>
+
+    <h2>Conclusion</h2>
+
+    <p>When performing a <code>LEFT JOIN</code>, using the <code>WHERE</code> clause to filter rows from the right table can unintentionally exclude rows from the left table. Instead, placing the filtering condition in the <code>ON</code> clause using an <code>AND</code> condition allows you to keep the full set of rows from the left table while applying the filter to the right table’s rows.</p>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popular Python Pandas Functions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, 'Courier New', monospace;
+        }
+        .function-example {
+            background-color: #f9f9f9;
+            border-left: 5px solid #3498db;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Most Popular Python Pandas Functions</h1>
+    <p>Pandas is a must-have library for anyone working with data in Python. It provides powerful data structures and functions to make data manipulation easy and efficient. Below are some of the most popular and useful pandas functions every data analyst should know:</p>
+
+    <h2>1. <code>read_csv()</code></h2>
+    <p>The <code>read_csv()</code> function is used to read data from a CSV file into a DataFrame. It is one of the most common ways to load structured data in Python.</p>
+    <div class="function-example">
+        <code>df = pd.read_csv('data.csv')</code>
+    </div>
+
+    <h2>2. <code>head()</code></h2>
+    <p><code>head()</code> returns the first few rows of the DataFrame, making it easy to quickly inspect the data.</p>
+    <div class="function-example">
+        <code>df.head()</code>
+    </div>
+
+    <h2>3. <code>describe()</code></h2>
+    <p><code>describe()</code> provides summary statistics for numerical columns in the DataFrame, such as mean, median, standard deviation, etc.</p>
+    <div class="function-example">
+        <code>df.describe()</code>
+    </div>
+
+    <h2>4. <code>dropna()</code></h2>
+    <p><code>dropna()</code> removes rows with missing values. It’s an essential function for cleaning up your data.</p>
+    <div class="function-example">
+        <code>df_clean = df.dropna()</code>
+    </div>
+
+    <h2>5. <code>fillna()</code></h2>
+    <p>If you prefer to fill in missing values rather than dropping them, <code>fillna()</code> is your go-to function.</p>
+    <div class="function-example">
+        <code>df_filled = df.fillna(0)</code>
+    </div>
+
+    <h2>6. <code>groupby()</code></h2>
+    <p><code>groupby()</code> is used to split the data into groups based on some criteria and then apply a function to each group.</p>
+    <div class="function-example">
+        <code>df.groupby('Category').sum()</code>
+    </div>
+
+    <h2>7. <code>merge()</code></h2>
+    <p><code>merge()</code> allows you to combine two DataFrames on common columns or indices, making it easy to perform SQL-like joins in pandas.</p>
+    <div class="function-example">
+        <code>merged_df = pd.merge(df1, df2, on='key_column')</code>
+    </div>
+
+    <h2>8. <code>pivot_table()</code></h2>
+    <p><code>pivot_table()</code> is great for summarizing and aggregating your data. It’s a powerful tool similar to Excel’s pivot tables.</p>
+    <div class="function-example">
+        <code>pd.pivot_table(df, values='Sales', index='Month', columns='Product', aggfunc='sum')</code>
+    </div>
+
+    <h2>9. <code>apply()</code></h2>
+    <p><code>apply()</code> allows you to apply a custom function across rows or columns of your DataFrame.</p>
+    <div class="function-example">
+        <code>df['new_column'] = df['existing_column'].apply(lambda x: x * 2)</code>
+    </div>
+
+    <h2>10. <code>value_counts()</code></h2>
+    <p>Need to count occurrences of each unique value in a column? Use <code>value_counts()</code>.</p>
+    <div class="function-example">
+        <code>df['Category'].value_counts()</code>
+    </div>
+
+    <footer>
+        <p>By mastering these functions, you’ll be well on your way to becoming a Pandas pro! Happy coding!</p>
+    </footer>
+    
+</body>
+</html>

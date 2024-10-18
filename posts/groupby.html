@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Python Pandas groupby() with Examples</title>
+</head>
+<body>
+    <article>
+        <header>
+            <h1>Understanding Python Pandas groupby() with Examples</h1>
+            <p><strong>Author:</strong> Yichun Chen</p>
+            <p><strong>Date:</strong> October 3, 2024</p>
+        </header>
+        
+        <section>
+            <h2>Introduction</h2>
+            <p>The <strong>groupby()</strong> function in Python’s <strong>Pandas</strong> library is one of the most powerful tools for data aggregation and analysis. It allows you to group your data by one or more columns and then apply a function to each group, whether it’s summing values, finding the mean, or counting occurrences. This post will help you understand how to use <code>groupby()</code> with practical examples.</p>
+        </section>
+        
+        <section>
+            <h2>What is <code>groupby()</code>?</h2>
+            <p>The <code>groupby()</code> method splits a DataFrame into groups based on a given column or set of columns. After splitting, you can apply different aggregation functions (like <code>sum()</code>, <code>mean()</code>, or <code>count()</code>) to perform calculations on each group.</p>
+        </section>
+        
+        <section>
+            <h2>Syntax:</h2>
+            <pre><code>DataFrame.groupby(by=None, axis=0, level=None, as_index=True, sort=True)</code></pre>
+            <ul>
+                <li><strong>by</strong>: The column(s) to group by.</li>
+                <li><strong>axis</strong>: Whether to group by rows (0) or columns (1).</li>
+                <li><strong>as_index</strong>: Whether the group labels should be set as the index of the resulting DataFrame.</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Example 1: Grouping by One Column</h2>
+            <p>Let's start with a simple example. Suppose we have a DataFrame that records sales data for different products:</p>
+            <pre><code>import pandas as pd
+
+# Sample Data
+data = {{
+    'Product': ['A', 'B', 'A', 'C', 'B', 'C'],
+    'Sales': [100, 150, 200, 130, 180, 220],
+    'Region': ['North', 'South', 'North', 'West', 'South', 'West']
+}}
+
+df = pd.DataFrame(data)
+print(df)</code></pre>
+
+            <p>The output:</p>
+            <table border="1">
+                <tr><th>Product</th><th>Sales</th><th>Region</th></tr>
+                <tr><td>A</td><td>100</td><td>North</td></tr>
+                <tr><td>B</td><td>150</td><td>South</td></tr>
+                <tr><td>A</td><td>200</td><td>North</td></tr>
+                <tr><td>C</td><td>130</td><td>West</td></tr>
+                <tr><td>B</td><td>180</td><td>South</td></tr>
+                <tr><td>C</td><td>220</td><td>West</td></tr>
+            </table>
+
+            <p>Now, if you want to calculate the <strong>total sales</strong> for each product, you can use <code>groupby()</code>:</p>
+            <pre><code># Group by Product and sum the Sales
+total_sales = df.groupby('Product')['Sales'].sum()
+print(total_sales)</code></pre>
+            
+            <p>Output:</p>
+            <table border="1">
+                <tr><th>Product</th><th>Sales</th></tr>
+                <tr><td>A</td><td>300</td></tr>
+                <tr><td>B</td><td>330</td></tr>
+                <tr><td>C</td><td>350</td></tr>
+            </table>
+        </section>
+        
+        <section>
+            <h2>Example 2: Grouping by Multiple Columns</h2>
+            <p>You can also group by multiple columns. Let’s say you want to calculate the total sales for each <strong>Product</strong> in each <strong>Region</strong>:</p>
+            <pre><code># Group by Product and Region, then sum the Sales
+sales_by_region = df.groupby(['Product', 'Region'])['Sales'].sum()
+print(sales_by_region)</code></pre>
+
+            <p>Output:</p>
+            <table border="1">
+                <tr><th>Product</th><th>Region</th><th>Sales</th></tr>
+                <tr><td>A</td><td>North</td><td>300</td></tr>
+                <tr><td>B</td><td>South</td><td>330</td></tr>
+                <tr><td>C</td><td>West</td><td>350</td></tr>
+            </table>
+        </section>
+        
+        <section>
+            <h2>Example 3: Applying Multiple Aggregation Functions</h2>
+            <p>You can apply multiple functions to grouped data at once. For example, if you want to find both the <strong>total</strong> and the <strong>average</strong> sales for each product, you can do the following:</p>
+            <pre><code># Group by Product and apply multiple aggregation functions
+sales_stats = df.groupby('Product')['Sales'].agg(['sum', 'mean'])
+print(sales_stats)</code></pre>
+
+            <p>Output:</p>
+            <table border="1">
+                <tr><th>Product</th><th>sum</th><th>mean</th></tr>
+                <tr><td>A</td><td>300</td><td>150.0</td></tr>
+                <tr><td>B</td><td>330</td><td>165.0</td></tr>
+                <tr><td>C</td><td>350</td><td>175.0</td></tr>
+            </table>
+        </section>
+        
+        <section>
+            <h2>Example 4: Filtering Groups</h2>
+            <p>Sometimes you may want to filter the groups to only include those that meet certain criteria. For instance, let’s filter to only include products with total sales greater than 320:</p>
+            <pre><code># Group by Product and filter groups with total sales > 320
+filtered_sales = df.groupby('Product').filter(lambda x: x['Sales'].sum() > 320)
+print(filtered_sales)</code></pre>
+
+            <p>Output:</p>
+            <table border="1">
+                <tr><th>Product</th><th>Sales</th><th>Region</th></tr>
+                <tr><td>B</td><td>150</td><td>South</td></tr>
+                <tr><td>B</td><td>180</td><td>South</td></tr>
+                <tr><td>C</td><td>130</td><td>West</td></tr>
+                <tr><td>C</td><td>220</td><td>West</td></tr>
+            </table>
+        </section>
+        
+        <section>
+            <h2>Conclusion</h2>
+            <p>The <code>groupby()</code> function is an essential tool for data manipulation and analysis in Pandas. Whether you’re calculating sums, means, or applying custom functions, <code>groupby()</code> provides flexibility to summarize and analyze large datasets efficiently. By understanding how to group data and apply various functions, you can unlock powerful insights from your data.</p>
+        </section>
+    </article>
+</body>
+</html>

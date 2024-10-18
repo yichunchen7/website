@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Gap and Island Problem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-left: 3px solid #007bff;
+            overflow-x: auto;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SQL Gap and Island Problem: Explained</h1>
+        <p>In SQL, the <strong>Gap and Island</strong> problem is a common challenge when dealing with sequences of data, such as identifying continuous groups (islands) or finding gaps in those sequences. It often arises in time-series data, event logs, or numerical sequences where you need to determine distinct ranges of values that form "islands" and the gaps between them.</p>
+
+        <h2>What are Gaps and Islands?</h2>
+        <ul>
+            <li><strong>Islands</strong>: Continuous or uninterrupted sequences of data points.</li>
+            <li><strong>Gaps</strong>: Breaks or interruptions in those sequences.</li>
+        </ul>
+
+        <p>For example, suppose you have a series of dates where employees logged in. If you want to group consecutive logins and identify where the user did not log in, you are solving a <strong>gaps and islands</strong> problem.</p>
+
+        <h2>Example Problem: Identifying Consecutive Dates</h2>
+        <p>Suppose you have the following table <code>EmployeeLogins</code> that records employee login dates:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>employee_id</th>
+                    <th>login_date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2024-01-01</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2024-01-02</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2024-01-03</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2024-01-05</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2024-01-06</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2024-01-09</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>In this dataset:</p>
+        <ul>
+            <li>There are consecutive login dates from <code>2024-01-01</code> to <code>2024-01-03</code> (an <strong>island</strong>).</li>
+            <li>There’s a gap between <code>2024-01-03</code> and <code>2024-01-05</code>.</li>
+            <li>Another island from <code>2024-01-05</code> to <code>2024-01-06</code>.</li>
+        </ul>
+
+        <h2>Solution using SQL</h2>
+        <p>To solve the gaps and islands problem, a common approach is to identify patterns in the data using row numbers or window functions.</p>
+
+        <h3>Query:</h3>
+        <pre><code>WITH CTE AS (
+    SELECT 
+        employee_id,
+        login_date,
+        ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY login_date) - 
+        DATEDIFF(day, '2024-01-01', login_date) AS group_id
+    FROM EmployeeLogins
+)
+SELECT 
+    employee_id,
+    MIN(login_date) AS start_date,
+    MAX(login_date) AS end_date
+FROM CTE
+GROUP BY employee_id, group_id
+ORDER BY start_date;</code></pre>
+
+        <h3>How It Works:</h3>
+        <ul>
+            <li>The difference between the <strong>row number</strong> and the <strong>date</strong> remains constant for consecutive rows. This creates a group identifier (<code>group_id</code>) for consecutive dates.</li>
+            <li>You then group by this <code>group_id</code> to identify each "island" of consecutive dates.</li>
+        </ul>
+
+        <h3>Output:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>employee_id</th>
+                    <th>start_date</th>
+                    <th>end_date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2024-01-01</td>
+                    <td>2024-01-03</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2024-01-05</td>
+                    <td>2024-01-06</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2024-01-09</td>
+                    <td>2024-01-09</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Real-World Use Cases for Gaps and Islands</h2>
+        <ul>
+            <li><strong>Subscription Monitoring</strong>: Track consecutive days of service or when users go inactive (gaps).</li>
+            <li><strong>Employee Attendance</strong>: Identify blocks of consecutive workdays or vacation periods.</li>
+            <li><strong>Stock Price Analysis</strong>: Detect consecutive days where a stock price was trending up or down.</li>
+        </ul>
+
+        <h2>Conclusion</h2>
+        <p>The <strong>Gaps and Islands</strong> problem is a powerful concept in SQL for working with sequential data. By using window functions like <code>ROW_NUMBER()</code> and leveraging arithmetic on date or numeric values, you can easily group data into meaningful chunks or find gaps between them. This approach is especially useful in scenarios involving time-series or event logs.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Tableau Parameter Actions for Interactive Dashboards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 40px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .author {
+            font-style: italic;
+            color: #555;
+        }
+        .date {
+            color: #555;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Understanding Tableau Parameter Actions for Interactive Dashboards</h1>
+
+    <p class="author">Author: Yichun Chen</p>
+    <p class="date">Date: September 19, 2024</p>
+
+    <p>Tableau is known for its powerful capabilities in creating interactive and dynamic dashboards. One of its most flexible features is <strong>Parameter Actions</strong>, which allows users to change a parameter's value based on interactions with a visualization. This adds an extra layer of interactivity, making dashboards more engaging and insightful. In this post, we’ll explore what Tableau parameter actions are, how they work, and when to use them.</p>
+
+    <h2>What Are Parameter Actions?</h2>
+
+    <p>A <strong>parameter</strong> in Tableau is a dynamic value that can be used to control the behavior of calculated fields, reference lines, filters, or other elements in your dashboard. <strong>Parameter actions</strong> allow you to change the value of a parameter through interactions such as clicking on a mark, hovering over data, or selecting a region.</p>
+
+    <h2>Example Use Case: Interactive Filtering</h2>
+
+    <p>Let’s imagine you’re working on a sales dashboard, and you want to allow users to select a product category by simply clicking on it in a chart. Instead of using dropdown filters, you can set up a parameter action that changes based on user interaction with a specific mark.</p>
+
+    <h2>Step-by-Step Guide: Creating a Parameter Action</h2>
+
+    <p>Here’s how to set up a parameter action:</p>
+
+    <ol>
+        <li><strong>Create a Parameter:</strong> In Tableau, go to the Data pane and click on “Create Parameter.” For example, you can create a parameter named <code>Selected Product</code> to capture the name of the product the user clicks on.</li>
+        <li><strong>Create a Calculated Field:</strong> Use the parameter in a calculated field to control the content displayed. For instance:
+            <pre><code>IF [Product] = [Selected Product] THEN [Sales] ELSE 0 END</code></pre>
+        </li>
+        <li><strong>Add Parameter Action:</strong> Go to the Dashboard menu and select <strong>Actions</strong>. From there, choose “Add Action” → “Change Parameter.” Configure the action by selecting the parameter you created and specifying the field you want to capture. For this example, you would set it to capture the <code>Product</code> field when the user clicks on it.</li>
+        <li><strong>Update Visualizations:</strong> Once the parameter action is applied, the visualizations will automatically update based on the user’s interaction. The selected product's sales will be highlighted across charts, making it easy to focus on specific data.</li>
+    </ol>
+
+    <h2>When to Use Parameter Actions</h2>
+
+    <p>Parameter actions are highly versatile and can be used in a variety of scenarios:</p>
+    <ul>
+        <li><strong>Dynamic Reference Lines:</strong> Create reference lines that adjust based on a user’s selection.</li>
+        <li><strong>Interactive Sorting:</strong> Let users control the sort order of data by interacting with the visual elements.</li>
+        <li><strong>Advanced Filtering:</strong> Implement multi-layered filtering where users can dynamically adjust filters by interacting with marks.</li>
+    </ul>
+
+    <h2>Conclusion</h2>
+
+    <p>Tableau parameter actions allow you to create more interactive and flexible dashboards, improving user engagement and delivering insights in a dynamic way. They’re simple to set up but provide a powerful tool to customize the experience for users.</p>
+
+</body>
+</html>
